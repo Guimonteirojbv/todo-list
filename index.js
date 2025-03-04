@@ -10,12 +10,11 @@ var Form = /** @class */ (function () {
         (_a = this.form) === null || _a === void 0 ? void 0 : _a.addEventListener('submit', function (e) { return _this.handleSubmit(e); });
     }
     Form.prototype.handleSubmit = function (e) {
-        var _a;
         e.preventDefault();
         var value = this.getInputValue();
-        if (value) {
+        if (value && this._input) {
             this.addTask(value);
-            (_a = this._input) === null || _a === void 0 ? void 0 : _a.value = '';
+            this._input.value = '';
         }
     };
     Form.prototype.getInputValue = function () {
@@ -25,20 +24,31 @@ var Form = /** @class */ (function () {
         }
     };
     Form.prototype.addTask = function (task) {
+        var _this = this;
         var _a;
         if (task) {
             var taskWrapper = document.createElement('div');
             taskWrapper.classList.add('task-wrapper');
             var buttonsActions = document.createElement('div');
+            var icon = document.createElement('img');
+            icon.src = './assets/images/trash.png';
             var buttonDelete = document.createElement('button');
             buttonDelete.classList.add('btn-delete');
-            buttonDelete.innerText = 'Delete';
+            buttonDelete.appendChild(icon);
+            buttonDelete.addEventListener('pointerdown', function (e) { return _this.removeTask(e); });
             buttonsActions.appendChild(buttonDelete);
             var taskElement = document.createElement('span');
             taskElement.innerText = task;
             taskWrapper.appendChild(taskElement);
             taskWrapper.appendChild(buttonsActions);
             (_a = this._wrapperTasks) === null || _a === void 0 ? void 0 : _a.appendChild(taskWrapper);
+        }
+    };
+    Form.prototype.removeTask = function (e) {
+        var buttonClicked = e.target;
+        var taskWrapper = buttonClicked.closest('.task-wrapper');
+        if (taskWrapper) {
+            taskWrapper.remove();
         }
     };
     return Form;
